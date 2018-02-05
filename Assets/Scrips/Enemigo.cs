@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Enemigo : MonoBehaviour 
 {
@@ -14,8 +16,10 @@ public class Enemigo : MonoBehaviour
     public float velocity;
     float waitTime = 3;
     float countWaitTime;
-
     public Transform target;
+	public Transform spawnPointShoot;
+	public Transform projectile;
+	float countShootTime;
 
 
 
@@ -23,6 +27,7 @@ public class Enemigo : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, patrolpoint[0].position, velocity * Time.deltaTime);
         countWaitTime = waitTime;
+		countShootTime = waitTime;
     }
 
     public void Atacar()
@@ -58,11 +63,31 @@ public class Enemigo : MonoBehaviour
                 }
                 
                 break;
-            case "ATACAR":
-                
-                break;
-            default:
+		case "ATACAR":
 
+
+			countShootTime -= Time.deltaTime;
+
+
+		
+			spawnPointShoot.LookAt (target);
+
+			if (countShootTime <= 0) 
+			{
+		
+				countShootTime = waitTime;
+				Disparar ();
+			}
+
+
+			if (target == null) 
+			{
+				
+				npcState = "PATRULLAR";
+
+			}
+
+                
                 break;
 
         }
@@ -78,6 +103,15 @@ public class Enemigo : MonoBehaviour
 
     }
 
+	public void Disparar()
+	{
+		
+			Instantiate (projectile, spawnPointShoot.position, Quaternion.identity);
+
+
+
+	
+	}
 
 
 

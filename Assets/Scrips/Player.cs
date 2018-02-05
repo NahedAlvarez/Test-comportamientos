@@ -54,8 +54,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D col)
-    {
+	private void OnCollisionStay2D(Collision2D col)
+	{
 
         jump = false;
 
