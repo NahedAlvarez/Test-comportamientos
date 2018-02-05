@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
 
         jump = false;
 
-        if (col.gameObject.tag != "Floor" && Input.GetKeyDown(KeyCode.Space) && Input.GetKeyDown(KeyCode.DownArrow))
+        if (col.gameObject.tag != "Floor" && Input.GetButton("Jump") && Input.GetButton("Vertical"))
         {
 
             counBool = true;
