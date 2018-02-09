@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemigo : MonoBehaviour 
 {
@@ -14,25 +15,33 @@ public class Enemigo : MonoBehaviour
     public Transform[] patrolpoint;
     int Point = 0;
     public float velocity;
-    float waitTime = 3;
+    float waitTime = 1;
     float countWaitTime;
     public Transform target;
 	public Transform spawnPointShoot;
 	public Transform projectile;
 	float countShootTime;
-
+    NavMeshAgent agente;
+    
 
 
     void Start()
     {
-        transform.position = Vector3.MoveTowards(transform.position, patrolpoint[0].position, velocity * Time.deltaTime);
+        agente = GetComponent<NavMeshAgent>();
+        agente.destination = patrolpoint[0].position;
+       // agente.autoBraking = false;
         countWaitTime = waitTime;
 		countShootTime = waitTime;
     }
 
-    public void Atacar()
+    public void Estado(string state)
     {
-        npcState = "ATACAR";
+        npcState = state;
+    }
+
+    public void MovementNextPoint()
+    {
+        agente.destination = patrolpoint[Point].position;
     }
 
 
@@ -41,17 +50,28 @@ public class Enemigo : MonoBehaviour
         switch (npcState)
         {
             case "PATRULLAR":
-                if (transform.position == patrolpoint[Point].position)
-                {  
-                    Point++;
-                    if (Point >= patrolpoint.Length)
-                    {
-                        Point = 0;
-                        npcState = "ESPERAR";
-                    }
 
+                if (transform.position.x == patrolpoint[Point].position.x)
+                {  
+                    if(transform.position.z == patrolpoint[Point].position.z)
+                    {
+                        Point++;
+                        // transform.LookAt(patrolpoint[Point]);
+                        //Debug.Log(Point);
+                        npcState = "ESPERAR";
+                        if (Point >= patrolpoint.Length)
+                        {
+                            
+                            Point = 0;
+                          
+                        }
+                        if (npcState == "PATRULLAR")
+                            MovementNextPoint();
+                    }
+                   
                 }
-                transform.position = Vector3.MoveTowards(transform.position, patrolpoint[Point].position, velocity * Time.deltaTime);
+               
+
                 break;
             case "ESPERAR":
 
@@ -59,7 +79,10 @@ public class Enemigo : MonoBehaviour
                 if (countWaitTime <= 0)
                 {
                     countWaitTime = waitTime;
+                    if(npcState != "ATACAR")
                     npcState = "PATRULLAR";
+                    agente.destination = patrolpoint[Point].position;
+
                 }
                 
                 break;
@@ -68,9 +91,17 @@ public class Enemigo : MonoBehaviour
 
 			countShootTime -= Time.deltaTime;
 
-
-		
+               // float dist = Vector3.Distance(other.position, transform.position);
+               // transform.LookAt(target);
 			spawnPointShoot.LookAt (target);
+                if (target != null)
+                {
+                    if (Vector3.Distance(transform.position, target.position) >= 16)
+                    {
+                        agente.destination = target.position;
+                    }
+                }
+                
 
 			if (countShootTime <= 0) 
 			{
@@ -84,8 +115,9 @@ public class Enemigo : MonoBehaviour
 			{
 				
 				npcState = "PATRULLAR";
+                    MovementNextPoint();
 
-			}
+            }
 
                 
                 break;
@@ -105,12 +137,8 @@ public class Enemigo : MonoBehaviour
 
 	public void Disparar()
 	{
-		
 			Instantiate (projectile, spawnPointShoot.position, Quaternion.identity);
 
-
-
-	
 	}
 
 

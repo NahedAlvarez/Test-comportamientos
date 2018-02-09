@@ -6,6 +6,7 @@ public class Ship : MonoBehaviour {
 
     Vector3 mousePosition;
    public Transform bala;
+   public  GameObject SpawnPoint;
 
    
     void Update()
@@ -26,7 +27,7 @@ public class Ship : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Pum");
-            BalaDisparada = Instantiate(bala, transform.position, Quaternion.identity);
+            BalaDisparada = Instantiate(bala, SpawnPoint.transform.position, Quaternion.identity);
         }
        
     }

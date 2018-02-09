@@ -5,9 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Ship.unity
     guid: 7ea93bf5e65cd457baf7cfd7f3e38834
   - enabled: 1
     path: Assets/Scenes/Platformer.unity
     guid: c5e57ee980ac54b11916507d2aed0776
+  - enabled: 1
+    path: Assets/Scenes/Npc.unity
+    guid: f27c61ac1260c4ddd916303e366187d8
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 00000000000000000000000000000000
